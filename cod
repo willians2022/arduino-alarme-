@@ -1,0 +1,109 @@
+int L = A0;  // variavel do sensor de luminosidade
+int temp = A1; // variavel do sensor de  temperatura
+
+int buzzer = 2; 
+int led1 = 5; 
+int led2 = 6; 
+int led3 = 7; 
+
+int led4 = 8; 
+int led5 = 9; 
+int led6 = 10; 
+int ledAB = 12; 
+
+void setup(){ 
+   
+pinMode(L, INPUT); 
+pinMode(buzzer, OUTPUT); 
+pinMode(led1, OUTPUT); 
+pinMode(led2, OUTPUT); 
+pinMode(led3, OUTPUT); 
+pinMode(led4, OUTPUT); 
+pinMode(led5, OUTPUT); 
+pinMode(led6, OUTPUT); 
+pinMode(ledAB, OUTPUT); 
+  
+Serial.begin(9600); 
+  
+} 
+
+void loop(){ 
+
+// variavel que recebe o valor do sensor de temperatura
+int SensorTemp = 0; 
+SensorTemp = analogRead(temp);
+  
+  // Obtenha uma leitura do sensor de temperatura:
+  float tensao = SensorTemp * ( 5019.9 / 1024.0 ) ;
+  
+  // Converte a tensao lida em Graus Celsius
+  float TemperaturaC = ( tensao - 500 ) / 10;
+ 
+Serial.print("Valor da Temperatura = ");
+ Serial.println(TemperaturaC); 
+  
+if (TemperaturaC >= 10) // liga o led verde quando o valor da temperatura for >= 10 graus celsius
+digitalWrite(led1, HIGH);
+  
+else 
+digitalWrite(led1, LOW); // desliga o led verde
+  
+  //-----//                                      //----//
+  
+  
+if (TemperaturaC >= 20)   // liga o led amarelo quando o valor da temperatura for >= 20 graus celsius
+digitalWrite(led2, HIGH);
+  
+else 
+digitalWrite(led2, LOW);// desliga o led amarelo
+  
+  //----//                                        //----//
+  
+  
+if (TemperaturaC >= 30) {  // liga o led vermelho quando o valor da temperatura for >= 30 graus celsius
+digitalWrite(led3, HIGH); 
+  
+tone(buzzer,261); //toca o buzzer quando a temperatura atingir 30 graus 
+  delay(200);
+} 
+else { 
+digitalWrite(led3, LOW); // desliga o led vermelho
+  
+tone(buzzer, 0); //buzzer desliga 
+  noTone(buzzer);
+} 
+  
+  
+//----------------------------------------------------------------------------------------------//  
+  
+
+// variavel que recebe o valor do sensor de luminosidade
+int ValorL = 0; 
+ValorL = analogRead(L); 
+  
+Serial.print("Valor da Luminosidade ="); // perguntar para prof se o sensor de luminosidade dá este valor alto mesmo, ou tem que fazer uma conta. igual foi feita na temperatura 
+Serial.println(ValorL); 
+Serial.println("--------------------------------------");  
+  
+  
+if (ValorL >= 600)  // liga o led vermelho quando o valor da luminosidade for >= 600
+digitalWrite(led6, HIGH);
+  
+else 
+digitalWrite(led6, LOW); // desliga o led
+  
+if (ValorL >= 500) // liga o led verde quando o valor da luminosidade for >= 500
+digitalWrite(led5, HIGH);
+  
+else 
+digitalWrite(led5, LOW); // desliga o led
+  
+if (ValorL >= 400) {  // liga o led verde quando o valor da luminosidade for >= 400
+digitalWrite(led4, HIGH); // liga o lede verde
+digitalWrite(ledAB, LOW); // desloga o led de alto brilho
+} 
+else { 
+digitalWrite(led4, LOW); // desliga o led quando o valor da luminosidade for >= 400, indicando que esta com luz !
+digitalWrite(ledAB, HIGH); // O led de alto brilho fica ligado enquanto nenhum dos led acender, indicando que está escuro!
+} 
+}
